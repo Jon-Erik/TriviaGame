@@ -18,10 +18,11 @@
 }
 
 .card-img-top {
-	width: 100%;
+	
 }
 
 .caption {
+	max-width: 300px;
 	width: 60%;
 	margin: 0 auto;
     float: none;
