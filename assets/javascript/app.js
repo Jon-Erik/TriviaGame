@@ -1,5 +1,5 @@
 var questionTime = 5;
-var answerTime = 10;
+var answerTime = 5;
 var questionOn = false;
 var timerRunning = false;
 var intervalIdQuestion;
@@ -45,7 +45,7 @@ function countDownQuestion() {
 		if (questionTime === 0) {
 			clearInterval(intervalIdQuestion);
 			questionTime = 5;
-			displayAnswerUnanswered(questionCount);
+			displayAnswerUnanswered();
 		}
 	}
 
@@ -58,11 +58,11 @@ function displayRemainingQuestion() {
 function countDownAnswer() {
 	answerTime--;
 	//questionCount++;
-	$("#time-remaining").html("</br>Time Remaining: " + answerTime + " seconds");
+	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	if (answerTime === 0) {
 		clearInterval(intervalIdAnswer);
 		answerTime = 5;
-		displayQuestion(questionCount);
+		displayQuestion();
 	}
 }
 
@@ -73,7 +73,7 @@ function displayRemainingAnswer() {
 	questionCount++;
 }
 
-function displayQuestion(questionCount) {
+function displayQuestion() {
 	if (questionCount === questions.length) {
 		$("#question-answer").html("Thanks for playing! Here's your score:</br></br> Correct Answers: " + correctResponses + "</br>" +
 									"Incorrect Answers: " + incorrectResponses + "</br>" + 
@@ -83,17 +83,17 @@ function displayQuestion(questionCount) {
 	}
 
 	$("#question-answer").html(questions[questionCount] + "</br></br>" + 
-		"<button class='btn choice'>" + choices[questionCount][0] + "</button>" + "    " + 
-		"<button class='btn choice'>" + choices[questionCount][1] + "</button>" + "    " +
-		"<button class='btn choice'>" + choices[questionCount][2] + "</button>" + "    " +
+		"<button class='btn choice'>" + choices[questionCount][0] + "</button>" +  
+		"<button class='btn choice'>" + choices[questionCount][1] + "</button>" + 
+		"<button class='btn choice'>" + choices[questionCount][2] + "</button>" + 
 		"<button class='btn choice'>" + choices[questionCount][3] + "</button>");
 	
 	$(".choice").on("click", function () {
 		var selectedAnswer = $(this).text();
 		if (selectedAnswer === correctAnswers[questionCount]) {
-			displayAnswerCorrect(questionCount);
+			displayAnswerCorrect();
 		} else {
-			displayAnswerIncorrect(questionCount);
+			displayAnswerIncorrect();
 		}
 	})
 
@@ -101,31 +101,44 @@ function displayQuestion(questionCount) {
 	displayRemainingQuestion();
 }
 
-function displayAnswerCorrect(questionCount) {
+function displayAnswerCorrect() {
 	clearInterval(intervalIdQuestion);
 	correctResponses++;
 	$("#question-answer").html("Correct!</br> The answer is: " + correctAnswers[questionCount] +
 	  "</br></br>" + explanations[questionCount]);
-	$("#time-remaining").html("</br>Time Remaining: " + answerTime + " seconds");
+	imageAndCaption();
+	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
 }
 
-function displayAnswerIncorrect(questionCount) {
+function displayAnswerIncorrect() {
 	clearInterval(intervalIdQuestion);
 	incorrectResponses++;
 	$("#question-answer").html("Incorrect!</br> The correct answer is: " + correctAnswers[questionCount] +
-	  "</br></br>" + explanations[questionCount]);
-	$("#time-remaining").html("</br>Time Remaining: " + questionTime + " seconds");
+	  "</br></br>" + explanations[questionCount] );
+	imageAndCaption();
+	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
 }
 
-function displayAnswerUnanswered(questionCount) {
+function displayAnswerUnanswered() {
 	clearInterval(intervalIdQuestion);
 	unansweredQuestions++;
 	$("#question-answer").html("Time's Up!</br>The answer is: " + correctAnswers[questionCount] +
 	  "</br></br>" + explanations[questionCount]);
-	$("#time-remaining").html("</br>Time Remaining: " + questionTime + " seconds");
+	imageAndCaption();
+	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
+}
+
+function imageAndCaption() {
+	$("#question-answer").append("</br></br>" +
+		"<div class='card caption'>" +
+			"<div class='card-header text-center'>" + "Caption" + "</div>" +
+			"<div class='text-center'>" +
+				"<img class='card-img-top' src='assets/images/background image.jpg'>" +
+			"</div>" +
+		"</div>")
 }
 
 $("#reset").on("click", function () {
@@ -133,7 +146,7 @@ $("#reset").on("click", function () {
 	incorrectResponses = 0;
 	correctResponses = 0;
 	unansweredQuestions = 0;
-	displayQuestion(questionCount);
+	displayQuestion();
 	//clearInterval(intervalIdQuestion);
 	clearInterval(intervalIdAnswer);
 });

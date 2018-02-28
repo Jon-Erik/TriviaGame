@@ -16,3 +16,14 @@
 	color: white;
 	font-weight: bold;
 }
+
+.card-img-top {
+	width: 100%;
+}
+
+.caption {
+	width: 60%;
+	margin: 0 auto;
+    float: none;
+    margin-top: 10px;
+}
