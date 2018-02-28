@@ -1,14 +1,11 @@
 var questionTime = 5;
 var answerTime = 5;
-var questionOn = false;
-var timerRunning = false;
 var intervalIdQuestion;
 var intervalIdAnswer;
 var correctResponses = 0;
 var incorrectResponses = 0;
 var unansweredQuestions = 0;
 var questionCount = 0;
-var userGuess;
 
 var questions = ["Johann Sebastian Bach, Domenico Scarlatti, and Georg Frederick Handel were all born in what year?",
 				 "How many children did Johann Sebastian Bach have?",
@@ -34,10 +31,27 @@ var correctAnswers = ["1685", "20", "Symphony No. 9 in D minor", "The Rite of Sp
 var explanations = ["Bach, Scarlatti, and Handel were all born in 1685, sometimes being referred to as 'The Class of 1685.'",
 				    "Bach was married twice, to Maria Barbara and Anna Magdalena, with whom he had 20 children. Sadly only 10 reached adulthood.",
 				    "Beethoven's ninth symphony was revolutionary, not only in its length and scope, but in its use of choir and vocal soloists in the last movement.",
-				    "Stravinsky's The Rite of Spring (Le Sacre du Printemps) caused a riot at its premiere at Les Ballets Russes in Paris in 1913.",
+				    "Igor Stravinsky's The Rite of Spring (Le Sacre du Printemps) caused a riot at its premiere at Les Ballets Russes in Paris in 1913.",
 				    "Mostly because of the dangerous political situation at the time in Europe, composers such as Stravinsky, Schoenberg, and many other musicians moved to Los Angeles in the 1930s and 40s.",
 				    "Mozart only lived to be 35 years old, but not before writing numerous symphonies, operas, religious works, and a great deal of chamber music, among other compositions.",
 				    "Mendelssohn was an art enthusiast and would frequently paint watercolour pictures."];
+
+var captions = ["Domenico Scarlatti, 1685-1757", 
+				"Johann Sebastian Bach, 1685-1750",
+				"Ludwig van Beethoven, 1770-1827",
+				"A dancer performing The Rite of Spring",
+				"The Los Angeles skyline",
+				"Wolfgang Amadeus Mozart, 1756-1791",
+				"A watercolour painting by Felix Mendelssohn"
+				]
+
+var images = ["assets/images/scarlatti.jpg",
+			  "assets/images/bach.jpg",
+			  "assets/images/beethoven.jpg",
+			  "assets/images/sacre dancer.jpg",
+			  "assets/images/LA skyline.jpg",
+			  "assets/images/mozart.jpg",
+			  "assets/images/mendelssohn painting.png"]
 
 function countDownQuestion() {
 		questionTime--;
@@ -57,7 +71,6 @@ function displayRemainingQuestion() {
 
 function countDownAnswer() {
 	answerTime--;
-	//questionCount++;
 	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	if (answerTime === 0) {
 		clearInterval(intervalIdAnswer);
@@ -75,14 +88,14 @@ function displayRemainingAnswer() {
 
 function displayQuestion() {
 	if (questionCount === questions.length) {
-		$("#question-answer").html("Thanks for playing! Here's your score:</br></br> Correct Answers: " + correctResponses + "</br>" +
+		$("#question-answer").html("<span class='heading'>Thanks for playing! Here's your score:</span></br></br> Correct Answers: " + correctResponses + "</br>" +
 									"Incorrect Answers: " + incorrectResponses + "</br>" + 
 									"Unanswered Questions: " + unansweredQuestions);
 		$("#time-remaining").hide();
 		return;
 	}
 
-	$("#question-answer").html(questions[questionCount] + "</br></br>" + 
+	$("#question-answer").html("<span class='heading'>" + questions[questionCount] + "</span></br></br>" + 
 		"<button class='btn choice'>" + choices[questionCount][0] + "</button>" +  
 		"<button class='btn choice'>" + choices[questionCount][1] + "</button>" + 
 		"<button class='btn choice'>" + choices[questionCount][2] + "</button>" + 
@@ -104,8 +117,8 @@ function displayQuestion() {
 function displayAnswerCorrect() {
 	clearInterval(intervalIdQuestion);
 	correctResponses++;
-	$("#question-answer").html("Correct!</br> The answer is: " + correctAnswers[questionCount] +
-	  "</br></br>" + explanations[questionCount]);
+	$("#question-answer").html("<span class='heading'>Correct!</br> The answer is: " + correctAnswers[questionCount] +
+	  "</span></br></br>" + explanations[questionCount]);
 	imageAndCaption();
 	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
@@ -114,8 +127,8 @@ function displayAnswerCorrect() {
 function displayAnswerIncorrect() {
 	clearInterval(intervalIdQuestion);
 	incorrectResponses++;
-	$("#question-answer").html("Incorrect!</br> The correct answer is: " + correctAnswers[questionCount] +
-	  "</br></br>" + explanations[questionCount] );
+	$("#question-answer").html("<span class='heading'>Incorrect!</br> The correct answer is: " + correctAnswers[questionCount] +
+	  "</span></br></br>" + explanations[questionCount] );
 	imageAndCaption();
 	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
@@ -124,8 +137,8 @@ function displayAnswerIncorrect() {
 function displayAnswerUnanswered() {
 	clearInterval(intervalIdQuestion);
 	unansweredQuestions++;
-	$("#question-answer").html("Time's Up!</br>The answer is: " + correctAnswers[questionCount] +
-	  "</br></br>" + explanations[questionCount]);
+	$("#question-answer").html("<span class='heading'>Time's Up!</br>The answer is: " + correctAnswers[questionCount] +
+	  "</span></br></br>" + explanations[questionCount]);
 	imageAndCaption();
 	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
 	displayRemainingAnswer();
@@ -134,9 +147,9 @@ function displayAnswerUnanswered() {
 function imageAndCaption() {
 	$("#question-answer").append("</br></br>" +
 		"<div class='card caption'>" +
-			"<div class='card-header text-center'>" + "Caption" + "</div>" +
+			"<div class='card-header text-center'>" + captions[questionCount] + "</div>" +
 			"<div class='text-center'>" +
-				"<img class='card-img-top' src='assets/images/background image.jpg'>" +
+				"<img class='card-img-top' src='" + images[questionCount] + "'>" +
 			"</div>" +
 		"</div>")
 }
@@ -146,8 +159,11 @@ $("#reset").on("click", function () {
 	incorrectResponses = 0;
 	correctResponses = 0;
 	unansweredQuestions = 0;
+	answerTime = 5;
+	questionTime = 5;
 	displayQuestion();
 	//clearInterval(intervalIdQuestion);
 	clearInterval(intervalIdAnswer);
+	$("#time-remaining").show();
 });
 

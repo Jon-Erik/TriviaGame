@@ -27,3 +27,7 @@
     float: none;
     margin-top: 10px;
 }
+
+.heading {
+	font-weight: bold;
+}
