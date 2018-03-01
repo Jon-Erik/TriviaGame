@@ -1,4 +1,4 @@
-var questionTime = 5;
+var questionTime = 25;
 var answerTime = 5;
 var intervalIdQuestion;
 var intervalIdAnswer;
@@ -7,6 +7,7 @@ var incorrectResponses = 0;
 var unansweredQuestions = 0;
 var questionCount = 0;
 
+//Content and relative paths for questions, answers, correct answers and explanations with images and captions
 var questions = ["Johann Sebastian Bach, Domenico Scarlatti, and Georg Frederick Handel were all born in what year?",
 				 "How many children did Johann Sebastian Bach have?",
 				 "Which Beethoven symphony includes choir and vocal soloists?",
@@ -53,22 +54,25 @@ var images = ["assets/images/scarlatti.jpg",
 			  "assets/images/mozart.jpg",
 			  "assets/images/mendelssohn painting.png"]
 
+//These functions create a timer to display when a question appears
 function countDownQuestion() {
 		questionTime--;
 		$("#time-remaining").html("</br>Time Remaining: " + questionTime + " seconds");
 		if (questionTime === 0) {
 			clearInterval(intervalIdQuestion);
-			questionTime = 5;
+			questionTime = 25;
 			displayAnswerUnanswered();
 		}
 	}
 
 function displayRemainingQuestion() {
 	clearInterval(intervalIdQuestion);
-	questionTime = 5;
+	questionTime = 25;
 	intervalIdQuestion = setInterval(countDownQuestion, 1000);
 }
 
+//These two functions are not called later on. They are replaced by a button instead of a timer
+//for moving to the next question but are still usable if desired.
 function countDownAnswer() {
 	answerTime--;
 	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
@@ -86,6 +90,7 @@ function displayRemainingAnswer() {
 	questionCount++;
 }
 
+//This function displays a question, choices displayed as buttons, and determines whether the selected answer is correct.
 function displayQuestion() {
 	if (questionCount === questions.length) {
 		$("#question-answer").html("<span class='heading'>Thanks for playing! Here's your score:</span></br></br> Correct Answers: " + correctResponses + "</br>" +
@@ -114,14 +119,16 @@ function displayQuestion() {
 	displayRemainingQuestion();
 }
 
+//Functions for what to do or display if the answer is correct, incorrect, or unanswered.
+//Timers to move on to the next question have been commented out but are still usable.
 function displayAnswerCorrect() {
 	clearInterval(intervalIdQuestion);
 	correctResponses++;
 	$("#question-answer").html("<span class='heading'>Correct!</br> The answer is: " + correctAnswers[questionCount] +
 	  "</span></br></br>" + explanations[questionCount]);
 	imageAndCaption();
-	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
-	displayRemainingAnswer();
+	//$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
+	//displayRemainingAnswer();
 }
 
 function displayAnswerIncorrect() {
@@ -130,8 +137,8 @@ function displayAnswerIncorrect() {
 	$("#question-answer").html("<span class='heading'>Incorrect!</br> The correct answer is: " + correctAnswers[questionCount] +
 	  "</span></br></br>" + explanations[questionCount] );
 	imageAndCaption();
-	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
-	displayRemainingAnswer();
+	//$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
+	//displayRemainingAnswer();
 }
 
 function displayAnswerUnanswered() {
@@ -140,10 +147,12 @@ function displayAnswerUnanswered() {
 	$("#question-answer").html("<span class='heading'>Time's Up!</br>The answer is: " + correctAnswers[questionCount] +
 	  "</span></br></br>" + explanations[questionCount]);
 	imageAndCaption();
-	$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
-	displayRemainingAnswer();
+	//$("#time-remaining").html("</br>Time remaining until next question: " + answerTime + " seconds");
+	//displayRemainingAnswer();
 }
 
+//This function displays the corresponding explanation, along with an image and caption, for each question.
+//It also displays a button to move on to the next question.
 function imageAndCaption() {
 	$("#question-answer").append("</br></br>" +
 		"<div class='card caption'>" +
@@ -151,19 +160,30 @@ function imageAndCaption() {
 			"<div class='text-center'>" +
 				"<img class='card-img-top' src='" + images[questionCount] + "'>" +
 			"</div>" +
-		"</div>")
+		"</div>" +
+		"</br>" +
+		"<button class='btn continue'>Continue</button>");
+
+	$(".continue").on("click", function() {
+		questionTime = 25;
+		clearInterval(intervalIdQuestion);
+		questionCount++;
+		$("#time-remaining").show();
+		displayQuestion();
+	})
+
+	$("#time-remaining").hide();	
 }
 
+//This function resets the trivia game back to the beginning if clicked at any time.
 $("#reset").on("click", function () {
 	questionCount = 0;
 	incorrectResponses = 0;
 	correctResponses = 0;
 	unansweredQuestions = 0;
 	answerTime = 5;
-	questionTime = 5;
+	questionTime = 25;
 	displayQuestion();
-	//clearInterval(intervalIdQuestion);
 	clearInterval(intervalIdAnswer);
 	$("#time-remaining").show();
 });
-
