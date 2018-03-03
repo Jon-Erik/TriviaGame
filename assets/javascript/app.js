@@ -35,7 +35,7 @@ var explanations = ["Bach, Scarlatti, and Handel were all born in 1685, sometime
 				    "Igor Stravinsky's The Rite of Spring (Le Sacre du Printemps) caused a riot at its premiere at Les Ballets Russes in Paris in 1913.",
 				    "Mostly because of the dangerous political situation at the time in Europe, composers such as Stravinsky, Schoenberg, and many other musicians moved to Los Angeles in the 1930s and 40s.",
 				    "Mozart only lived to be 35 years old, but not before writing numerous symphonies, operas, religious works, and a great deal of chamber music, among other compositions.",
-				    "Mendelssohn was an art enthusiast and who frequently painted watercolour pictures, often landscapes."];
+				    "Mendelssohn was an art enthusiast who frequently painted watercolour pictures, often landscapes."];
 
 var captions = ["Domenico Scarlatti, 1685-1757", 
 				"Johann Sebastian Bach, 1685-1750",
